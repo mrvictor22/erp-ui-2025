@@ -11,6 +11,10 @@ import { Dashboard } from './components/Dashboard';
 import { SalesModule } from './components/sales/SalesModule';
 import { BillingModule } from './components/billing/BillingModule';
 import { InventoryModule } from './components/inventory/InventoryModule';
+import { POSModule } from './components/pos/POSModule';
+import { LogisticsModule } from './components/logistics/LogisticsModule';
+import { CustomersModule } from './components/customers/CustomersModule';
+import { CompaniesModule } from './components/companies/CompaniesModule';
 
 // Create root route with Layout
 const rootRoute = createRootRoute({
@@ -45,29 +49,37 @@ const inventoryRoute = createRoute({
 const posRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/pos',
-  component: () => <div>Point of Sale</div>,
+  component: POSModule,
 });
 
 const logisticsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/logistics',
-  component: () => <div>Logistics Module</div>,
+  component: LogisticsModule,
 });
 
 const customersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/customers',
-  component: () => <div>Customer Management</div>,
+  component: CustomersModule,
 });
 
 const companiesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/companies',
-  component: () => <div>Companies Module</div>,
+  component: CompaniesModule,
 });
 
 // Create router and query client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   billingRoute,
@@ -96,4 +108,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
